@@ -88,6 +88,9 @@ docker ps
 
 # curl 테스트
 curl http://127.0.0.1/index.html
+
+# DockerHub에 배포
+docker tag bootapp:1.0 {dockerhub_id}/{docker_image_name}:v1
 ```
 
 <br>

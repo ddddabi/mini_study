@@ -2,6 +2,9 @@
 
 <br>
 
+> 관련 학습 개념은 [노션 링크](https://www.notion.so/StudyBook-2736e7f13a77815999bdefd996ece64a?source=copy_link)에서 확인해 보세요.
+
+<br>
 
 ## 📌 프로젝트 목표  
 

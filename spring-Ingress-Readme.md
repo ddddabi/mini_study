@@ -1,40 +1,45 @@
 # 🟢 Spring Boot와 Docker, Kubernetes Ingress를 활용한 웹 애플리케이션 배포 및 외부 통신 테스트
 
----
+<br>
+
 
 ## 📌 프로젝트 목표  
 
 > Spring Boot 애플리케이션을 Docker와 Kubernetes를 이용해 컨테이너화한 후, 클러스터 내에서 다중 Pod로 배포 및 관리한다.  
 > Ingress를 통해 클러스터 외부 트래픽을 내부 서비스로 라우팅하고 로드밸런싱한다.  
 
----
+<br>
 
 ## 🛠 프로젝트 진행 흐름 (Flow)  
 
-1. **Spring Boot 앱 생성**  
-   - 간단한 GET/POST API 및 index.html 페이지 제공  
+1. [**Spring Boot 앱 생성**](#1️⃣-Spring-Boot-앱-생성)
+   - 간단한 GET/POST API 및 index.html 페이지 제공 
 
-2. **Docker 빌드 & Hub 업로드**  
+2. [**Docker 빌드 & Hub 업로드**](#2️⃣-Docker-Hub-업로드-및-컨테이너-실행)
    - Dockerfile 기반으로 이미지 생성 후 Docker Hub에 업로드  
 
-3. **Kubernetes 리소스 배포**  
+3. [**Kubernetes 리소스 배포**](#3️⃣-Kubernetes-YAML-배포)  
    - Deployment(3 replicas) 및 Service(NodePort) 생성  
    - Pod/Service 상태 확인 및 통신 테스트  
 
-4. **외부 통신 확인**  
+4. [**외부 통신 확인**](#4️⃣-포트-포워딩-&-NodePort-테스트)
    - 포트 포워딩, NodePort 방식으로 curl 테스트
      
-5. **Ingress 설정 및 검증**  
+5. [**Ingress 설정 및 검증**](#5️⃣-Spring-Boot-앱-Ingress-설정)
    - Ingress rule에 애플리케이션 추가  
    - Host 기반 라우팅(`spring.local`)으로 외부 접근 및 로드밸런싱 확인  
 
----
+<br>
 
 ## 📊 프로젝트 아키텍처
 
-> <img width="2341" height="783" alt="Image" src="https://github.com/user-attachments/assets/3b01671c-7437-4940-9940-c5de0dde791f" />
+ <img width="2341" height="783" alt="Image" src="https://github.com/user-attachments/assets/3b01671c-7437-4940-9940-c5de0dde791f" />
+
+<br>
 
 ---
+
+<br>
 
 ## ⚙ 프로젝트 단계
 
@@ -63,7 +68,8 @@ public class Controller {
 }
 ```
 
----
+<br>
+<br>
 
 ### 2️⃣ Docker Hub 업로드 및 컨테이너 실행
 
@@ -84,7 +90,8 @@ docker ps
 curl http://127.0.0.1/index.html
 ```
 
----
+<br>
+<br>
 
 ### 3️⃣ Kubernetes YAML 배포
 
@@ -135,7 +142,7 @@ kubectl get pod
 kubectl get svc
 ```
 
----
+<br>
 
 ###  주요 포트 개념
 
@@ -146,7 +153,8 @@ kubectl get svc
 | port          | Cluster 내부에서 Service가 노출하는 포트 |
 | nodePort      | 외부 접근 가능 포트 (30000~32767 범위) |
 
----
+<br>
+<br>
 
 ### 4️⃣ 포트 포워딩 & NodePort 테스트
 
@@ -161,7 +169,8 @@ http://localhost:8082
 curl http://<NodeIP>:30080/app2/get
 ```
 
----
+<br>
+<br>
 
 ### 5️⃣ Spring Boot 앱 Ingress 설정
 
@@ -232,7 +241,8 @@ curl http://spring.local/app2/get
 ```
 > <img width="664" height="42" alt="Image" src="https://github.com/user-attachments/assets/128ffd8a-5828-42ec-860f-3f3dee7c4a8d" />
 
----
+<br>
+<br>
 
 ## ✅ 결과
 

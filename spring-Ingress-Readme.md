@@ -1,154 +1,265 @@
-# 🚀 YAML 파일로 Spring App 배포하기
-
-## 📂 1. 작업 디렉토리 이동
-
-``` bash
-$ pwd
-/home/ubuntu/05.k8s
-```
-
-------------------------------------------------------------------------
-
-## 📝 2. `spring-cluster.yaml` 파일 생성
-
-``` bash
-$ vi spring-cluster.yaml    # yaml 파일 작성 후 저장
-```
-
-### ✨ spring-cluster.yaml
-
-``` yaml
-# ---------------------- Deployment ----------------------
-apiVersion: apps/v1                               # API 버전 (Deployment 리소스는 apps/v1 사용)
-kind: Deployment                                  # 리소스 종류: Deployment
-metadata:
-  name: myapp-deployment                          # Deployment 이름
-spec:
-  replicas: 3                                     # 생성할 Pod 개수 (복제본 수)
-  selector:                                       # 어떤 Pod들을 관리할지 선택 기준
-    matchLabels:
-      app: myapp                                  # "app=myapp" 라벨을 가진 Pod 선택
-  template:                                       # 위 matchLabels 조건에 맞는 Pod 템플릿 정의
-    metadata:
-      labels:
-        app: myapp                                # Pod에 라벨 부여 (Service와 연결될 기준)
-    spec:
-      containers:
-      - name: springappsample2                    # 컨테이너 이름
-        image: dbin887742/springappsample2:v1     # 실행할 Docker Hub 이미지
-        ports:
-        - containerPort: 8080                     # 컨테이너 내부에서 사용하는 포트
+# 🟢 Spring Boot와 Docker, Kubernetes Ingress를 활용한 웹 애플리케이션 배포 및 외부 통신 테스트
 
 ---
-# ---------------------- Service ----------------------
-apiVersion: v1                                    # API 버전 (Service 리소스는 v1 사용)
-kind: Service                                     # 리소스 종류: Service
+
+## 📌 프로젝트 목표
+
+1. **Spring Boot 앱 Docker Hub 업로드**
+   - DB 연동 없는 단순 GET/POST 앱
+   - index.html 제공
+2. **Kubernetes 리소스 생성**
+   - 선언형 YAML 기반
+   - Pod 3개 생성 및 관리 (생성/삭제/실행 확인 가능)
+   - 외부 통신 확인 (브라우저 / Postman)
+3. **서버 환경 구성**
+   - myserver02 복제 → myserver03 생성
+   - SSH 연결 설정
+4. **Ingress 설치**
+   - 기존 rule에 앱 추가
+   - curl로 외부 접속 확인
+
+---
+
+## 🏗 프로젝트 구조
+
+```
+mini-project/
+├── Dockerfile
+├── spring-cluster.yaml
+├── spring-ingress.yaml
+├── src/
+│   └── main/java/edu/ce/fisa/controller/Controller.java
+└── README.md
+```
+
+---
+
+## 📊 프로젝트 구조도
+
+> (구조도 이미지 삽입 예정)
+
+---
+
+## ⚙ 프로젝트 단계
+
+### 1️⃣ Spring Boot 앱 생성
+
+Spring Boot 앱은 `/app2/get`, `/app2/post` 두 개의 엔드포인트를 제공합니다.
+
+```java
+package edu.ce.fisa.controller;
+
+import org.springframework.web.bind.annotation.*;
+
+@RestController
+@RequestMapping("app2")
+public class Controller {
+
+    @GetMapping("/get")
+    public String getReqRes() {
+        return "SpringApp - get 방식";
+    }
+
+    @PostMapping("/post")
+    public String postReqRes() {
+        return "SpringApp - post 방식";
+    }
+}
+```
+
+---
+
+### 2️⃣ Docker Hub 업로드 및 컨테이너 실행
+
+```bash
+# Dockerfile로 이미지 생성
+docker build -t bootapp:1.0 .
+
+# 이미지 확인
+docker images
+
+# 컨테이너 실행
+docker run -p 8081:8081 --name bootapp -d bootapp:1.0
+
+# 실행 중 컨테이너 확인
+docker ps
+
+# curl 테스트
+curl http://127.0.0.1/index.html
+```
+
+---
+
+### 3️⃣ Kubernetes YAML 배포
+
+#### `spring-cluster.yaml`
+
+```yaml
+apiVersion: apps/v1
+kind: Deployment
 metadata:
-  name: myapp-service                             # Service 이름
+  name: myapp-deployment
+spec:
+  replicas: 3
+  selector:
+    matchLabels:
+      app: myapp
+  template:
+    metadata:
+      labels:
+        app: myapp
+    spec:
+      containers:
+      - name: springappsample2
+        image: dbin887742/springappsample2:v1
+        ports:
+        - containerPort: 8080
+
+---
+apiVersion: v1
+kind: Service
+metadata:
+  name: myapp-service
 spec:
   selector:
-    app: myapp                                    # "app=myapp" 라벨을 가진 Pod 대상으로 트래픽 전달
+    app: myapp
   ports:
-    - protocol: TCP                               # 프로토콜
-      port: 8081                                  # 클러스터 내부에서 Service가 노출하는 포트
-      targetPort: 8080                            # Pod(컨테이너)가 실제로 사용하는 포트
-      nodePort: 30080                             # 클러스터 외부(Node IP)에서 접근할 수 있는 포트 (30000~32767 범위)
-  type: NodePort                                  # NodePort 타입: NodeIP:nodePort로 외부 접근 가능
+    - protocol: TCP
+      port: 8081
+      targetPort: 8080
+      nodePort: 30080
+  type: NodePort
 ```
 
-------------------------------------------------------------------------
+#### 리소스 생성 및 확인
 
-## 🚀 3. 리소스 생성
-
-``` bash
-$ kubectl apply -f spring-cluster.yaml
-
-deployment.apps/myapp-deployment created
-service/myapp-service created
+```bash
+kubectl apply -f spring-cluster.yaml
+kubectl get pod
+kubectl get svc
 ```
 
-------------------------------------------------------------------------
+---
 
-## 📋 4. Pod 확인
+###  주요 포트 개념
 
-``` bash
-$ kubectl get pod
+| 용어          | 설명 |
+|---------------|------------------------------------------------|
+| containerPort | 컨테이너 내부에서 앱이 실제로 사용하는 포트 (기본 8080) |
+| targetPort    | Service → Pod 간 트래픽 전달 포트 |
+| port          | Cluster 내부에서 Service가 노출하는 포트 |
+| nodePort      | 외부 접근 가능 포트 (30000~32767 범위) |
 
-NAME                                READY   STATUS    RESTARTS   AGE
-myapp-deployment-6d5496c75c-78blm   1/1     Running   0          42s
-myapp-deployment-6d5496c75c-c655d   1/1     Running   0          42s
-myapp-deployment-6d5496c75c-rhxb4   1/1     Running   0          42s
+---
+
+### 4️⃣ 포트 포워딩 & NodePort 테스트
+
+```bash
+# 포트 포워딩
+kubectl port-forward service/myapp-service 8082:8081
+
+# 로컬 브라우저 테스트
+http://localhost:8082
+
+# NodePort 테스트
+curl http://<NodeIP>:30080/app2/get
 ```
 
-------------------------------------------------------------------------
+---
 
-## 📖 주요 포트 개념
+### 5️⃣ myserver02 복제 및 myserver03 생성
 
-  ------------------------------------------------------------------------
-  용어            설명
-  --------------- --------------------------------------------------------
-  containerPort   컨테이너 내부에서 앱이 실제로 듣는 포트 (Spring Boot
-                  기본 8080)
+```bash
+# 호스트 네트워크 설정
+sudo vim /etc/netplan/01-netcfg.yaml
+sudo netplan apply
 
-  targetPort      Service가 컨테이너로 트래픽을 전달할 때 연결하는 포트
-                  (보통 containerPort와 동일)
+# /etc/hosts 수정
+10.0.2.25 myserver03
+10.0.2.20 myserver02
+10.0.2.15 myserver01
 
-  port            ClusterIP/Service 내부에서 사용하는 포트
-
-  nodePort        외부에서 Node IP + 이 포트로 접속할 수 있는 포트
-                  (30000\~32767)
-  ------------------------------------------------------------------------
-
-⚠️ **중요:** `targetPort`와 `containerPort`는 같아야 정상적으로 연결됨.
-
-------------------------------------------------------------------------
-
-## 🌐 5. 포트 포워딩
-
-``` bash
-$ kubectl port-forward service/myapp-service 8082:8081
-
-Forwarding from 127.0.0.1:8082 -> 8080
-Forwarding from [::1]:8082 -> 8080
+# SSH 키 등록
+ssh-keygen -t rsa -b 4096
+ssh-copy-id ubuntu@myserver03
+ssh ubuntu@myserver03
 ```
 
-👉 로컬 브라우저에서 접속:
+---
 
-    http://localhost:8082
+### 6️⃣ Spring Boot 앱 Ingress 설정
 
-------------------------------------------------------------------------
+#### `spring-ingress.yaml`
 
-## 🐳 6. Docker Pull
+```yaml
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: myapp-deployment2
+spec:
+  replicas: 3
+  selector:
+    matchLabels:
+      app: myapp
+  template:
+    metadata:
+      labels:
+        app: myapp
+    spec:
+      containers:
+      - name: springappsample2
+        image: dbin887742/springappsample2:v1
+        ports:
+        - containerPort: 8080
 
-``` bash
-$ docker pull dbin887742/springappsample2:v1
+---
+apiVersion: v1
+kind: Service
+metadata:
+  name: myapp-service2
+spec:
+  selector:
+    app: myapp
+  ports:
+    - protocol: TCP
+      port: 8082
+      targetPort: 8080
+  type: ClusterIP
+
+---
+apiVersion: networking.k8s.io/v1
+kind: Ingress
+metadata:
+  name: nginx-ingress
+  annotations:
+    nginx.ingress.kubernetes.io/rewrite-target: /
+spec:
+  rules:
+  - host: spring.local
+    http:
+      paths:
+      - path: /
+        pathType: Prefix
+        backend:
+          service:
+            name: myapp-service2
+            port:
+              number: 8082
 ```
 
-------------------------------------------------------------------------
+#### 적용 및 확인
 
-## 🌍 7. NodePort 외부 접속
-
-NodePort 방식을 사용하면 외부에서도 접근 가능합니다.
-
-``` bash
-curl http://192.168.49.2:30080/app2/get
+```bash
+kubectl apply -f spring-ingress.yaml
+kubectl get all
+curl http://spring.local/app2/get
 ```
 
-> port-forward는 로컬에서만 접속 가능하지만, NodePort는 외부 접속도
-> 허용합니다.
+---
 
-------------------------------------------------------------------------
+## ✅ 결과
 
-## ✅ 최종 테스트
-
-브라우저에서 아래 주소로 접속:
-
-    http://localhost:8080/app2/get
-
-![결과
-이미지](https://github.com/user-attachments/assets/62b1aa52-31b1-4ab9-b314-194acbd64744)
-
-
-
-
-# spring app에 ingress 적용
+- Docker Hub에 Spring Boot 앱 업로드 완료  
+- Minikube에서 Pod 3개, Service, Ingress 설정 완료  
+- myserver02 → myserver03 SSH 연결 완료  
+- Ingress를 통한 외부 접속 및 curl 테스트 성공  

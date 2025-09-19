@@ -4,4 +4,4 @@
 
 | 구분 | Readme Link |
 |----|-------|
-|spring app에 ingress 추가 | |
+|spring app에 ingress 추가 |🔗 [LINK](https://github.com/ddddabi/mini_study/blob/main/spring-Ingress-Readme.md) |

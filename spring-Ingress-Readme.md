@@ -114,7 +114,7 @@ spec:
     spec:
       containers:
       - name: springappsample2
-        image: dbin887742/springappsample2:v1
+        image: {dockerhub_id}/{docker_image_name}:v1
         ports:
         - containerPort: 8080
 
@@ -148,7 +148,7 @@ kubectl get svc
 
 | 용어          | 설명 |
 |---------------|------------------------------------------------|
-| containerPort | 컨테이너 내부에서 앱이 실제로 사용하는 포트 (기본 8080) |
+| containerPort | 컨테이너 내부에서 앱이 실제로 사용하는 포트 |
 | targetPort    | Service → Pod 간 트래픽 전달 포트 |
 | port          | Cluster 내부에서 Service가 노출하는 포트 |
 | nodePort      | 외부 접근 가능 포트 (30000~32767 범위) |
@@ -193,7 +193,7 @@ spec:
     spec:
       containers:
       - name: springappsample2
-        image: dbin887742/springappsample2:v1
+        image: {dockerhub_id}/{docker_image_name}:v1
         ports:
         - containerPort: 8080
 

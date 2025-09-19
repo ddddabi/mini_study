@@ -38,6 +38,14 @@
 
  <img width="2341" height="783" alt="Image" src="https://github.com/user-attachments/assets/3b01671c-7437-4940-9940-c5de0dde791f" />
 
+   - **사용자(Client)** → `spring.local` 도메인으로 요청
+   
+   - **Ingress Controller(Nginx)** → Ingress 리소스 규칙을 기반으로 요청을 특정 Service로 라우팅
+     
+   - **Service (ClusterIP)** → 요청을 해당 Deployment의 Pod들로 전달 (로드밸런싱)
+     
+   - **Pod (Spring Boot App)** → 실제 API 처리
+     
 <br>
 
 ---
@@ -76,30 +84,30 @@ public class Controller {
 
 ### 2️⃣ Docker Hub 업로드 및 컨테이너 실행
 
+- `Dockerfile`을을 이용해 Spring Boot 앱을 컨테이너화
+
+- 로컬에서 먼저 컨테이너 실행 및 curl 테스트 진행
+
+- 검증 후 Docker Hub에 푸시하여 Kubernetes가 가져다 쓸 수 있는 이미지로 준비
+  
 ```bash
-# Dockerfile로 이미지 생성
 docker build -t bootapp:1.0 .
-
-# 이미지 확인
-docker images
-
-# 컨테이너 실행
 docker run -p 8081:8081 --name bootapp -d bootapp:1.0
-
-# 실행 중 컨테이너 확인
-docker ps
-
-# curl 테스트
 curl http://127.0.0.1/index.html
 
-# DockerHub에 배포
+# DockerHub 업로드
 docker tag bootapp:1.0 {dockerhub_id}/{docker_image_name}:v1
+docker push {dockerhub_id}/{docker_image_name}:v1
 ```
 
 <br>
 <br>
 
 ### 3️⃣ Kubernetes YAML 배포
+
+- `Deployment` : Pod를 3개 복제(Replica)로 실행
+
+- `Service (NodePort)` : 클러스터 외부에서 접근 가능하도록 설정
 
 #### `spring-cluster.yaml`
 
@@ -180,6 +188,8 @@ curl http://<NodeIP>:30080/app2/get
 
 ### 5️⃣ Spring Boot 앱 Ingress 설정
 
+- `Ingress를` 사용하여 하나의 LoadBalancer/Ingress Controller로 도메인 기반 트래픽 분배
+
 #### `spring-ingress.yaml`
 
 ```yaml
@@ -253,7 +263,6 @@ curl http://spring.local/app2/get
 ## ✅ 결과
 
 - Docker Hub에 Spring Boot 앱 업로드 완료  
-- Minikube에서 Pod 3개, Service, Ingress 설정 완료  
-- myserver02 → myserver03 SSH 연결 완료  
+- Minikube에서 Pod 3개, Service, Ingress 설정 완료   
 - Ingress를 통한 외부 접속 및 curl 테스트 성공
 

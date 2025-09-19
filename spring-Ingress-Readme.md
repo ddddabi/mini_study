@@ -2,21 +2,31 @@
 
 ---
 
-## 📌 프로젝트 목표
+## 📌 프로젝트 목표  
 
-1. **Spring Boot 앱 Docker Hub 업로드**
-   - DB 연동 없는 단순 GET/POST 앱
-   - index.html 제공
-2. **Kubernetes 리소스 생성**
-   - 선언형 YAML 기반
-   - Pod 3개 생성 및 관리 (생성/삭제/실행 확인 가능)
-   - 외부 통신 확인 (브라우저 / Postman)
-3. **서버 환경 구성**
-   - myserver02 복제 → myserver03 생성
-   - SSH 연결 설정
-4. **Ingress 설치**
-   - 기존 rule에 앱 추가
-   - curl로 외부 접속 확인
+> Spring Boot 애플리케이션을 Docker와 Kubernetes를 이용해 컨테이너화한 후, 클러스터 내에서 다중 Pod로 배포 및 관리한다.  
+> Ingress를 통해 클러스터 외부 트래픽을 내부 서비스로 라우팅하고 로드밸런싱한다.  
+
+---
+
+## 🛠 프로젝트 진행 흐름 (Flow)  
+
+1. **Spring Boot 앱 생성**  
+   - 간단한 GET/POST API 및 index.html 페이지 제공  
+
+2. **Docker 빌드 & Hub 업로드**  
+   - Dockerfile 기반으로 이미지 생성 후 Docker Hub에 업로드  
+
+3. **Kubernetes 리소스 배포**  
+   - Deployment(3 replicas) 및 Service(NodePort) 생성  
+   - Pod/Service 상태 확인 및 통신 테스트  
+
+4. **외부 통신 확인**  
+   - 포트 포워딩, NodePort 방식으로 curl 테스트
+     
+5. **Ingress 설정 및 검증**  
+   - Ingress rule에 애플리케이션 추가  
+   - Host 기반 라우팅(`spring.local`)으로 외부 접근 및 로드밸런싱 확인  
 
 ---
 

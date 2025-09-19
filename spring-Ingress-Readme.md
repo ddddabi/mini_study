@@ -20,23 +20,9 @@
 
 ---
 
-## 🏗 프로젝트 구조
+## 📊 프로젝트 아키텍처
 
-```
-mini-project/
-├── Dockerfile
-├── spring-cluster.yaml
-├── spring-ingress.yaml
-├── src/
-│   └── main/java/edu/ce/fisa/controller/Controller.java
-└── README.md
-```
-
----
-
-## 📊 프로젝트 구조도
-
-> (구조도 이미지 삽입 예정)
+> <img width="2341" height="783" alt="Image" src="https://github.com/user-attachments/assets/3b01671c-7437-4940-9940-c5de0dde791f" />
 
 ---
 
@@ -44,7 +30,7 @@ mini-project/
 
 ### 1️⃣ Spring Boot 앱 생성
 
-Spring Boot 앱은 `/app2/get`, `/app2/post` 두 개의 엔드포인트를 제공합니다.
+- Spring Boot 앱에서 `/app2/get`, `/app2/post` 두 개의 엔드포인트를 제공
 
 ```java
 package edu.ce.fisa.controller;
@@ -167,27 +153,7 @@ curl http://<NodeIP>:30080/app2/get
 
 ---
 
-### 5️⃣ myserver02 복제 및 myserver03 생성
-
-```bash
-# 호스트 네트워크 설정
-sudo vim /etc/netplan/01-netcfg.yaml
-sudo netplan apply
-
-# /etc/hosts 수정
-10.0.2.25 myserver03
-10.0.2.20 myserver02
-10.0.2.15 myserver01
-
-# SSH 키 등록
-ssh-keygen -t rsa -b 4096
-ssh-copy-id ubuntu@myserver03
-ssh ubuntu@myserver03
-```
-
----
-
-### 6️⃣ Spring Boot 앱 Ingress 설정
+### 5️⃣ Spring Boot 앱 Ingress 설정
 
 #### `spring-ingress.yaml`
 
@@ -254,6 +220,7 @@ kubectl apply -f spring-ingress.yaml
 kubectl get all
 curl http://spring.local/app2/get
 ```
+> <img width="664" height="42" alt="Image" src="https://github.com/user-attachments/assets/128ffd8a-5828-42ec-860f-3f3dee7c4a8d" />
 
 ---
 
@@ -262,4 +229,5 @@ curl http://spring.local/app2/get
 - Docker Hub에 Spring Boot 앱 업로드 완료  
 - Minikube에서 Pod 3개, Service, Ingress 설정 완료  
 - myserver02 → myserver03 SSH 연결 완료  
-- Ingress를 통한 외부 접속 및 curl 테스트 성공  
+- Ingress를 통한 외부 접속 및 curl 테스트 성공
+

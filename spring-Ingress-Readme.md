@@ -22,7 +22,7 @@
    - Deployment(3 replicas) 및 Service(NodePort) 생성  
    - Pod/Service 상태 확인 및 통신 테스트  
 
-4. [**외부 통신 확인**](#4️⃣-포트-포워딩-&-NodePort-테스트)
+4. [**외부 통신 확인**](#4️⃣-포트-포워딩--nodeport-테스트)
    - 포트 포워딩, NodePort 방식으로 curl 테스트
      
 5. [**Ingress 설정 및 검증**](#5️⃣-Spring-Boot-앱-Ingress-설정)

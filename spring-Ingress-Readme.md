@@ -8,7 +8,8 @@
 
 ## 📌 프로젝트 목표  
 
-> Spring Boot 애플리케이션을 Docker와 Kubernetes를 이용해 컨테이너화한 후, 클러스터 내에서 다중 Pod로 배포 및 관리한다.  
+> Spring Boot 애플리케이션을 Docker와 Kubernetes를 이용해 컨테이너화한 후, 클러스터 내에서 다중 Pod로 배포 및 관리한다.
+> 
 > Ingress를 통해 클러스터 외부 트래픽을 내부 서비스로 라우팅하고 로드밸런싱한다.  
 
 <br>
@@ -48,9 +49,18 @@
      
 <br>
 
----
+## 💻 개발 환경 (Environment / Stack)
+
+| Category        | Stack / Tools                                                                 |
+|-----------------|-------------------------------------------------------------------------------|
+| Container       | ![Docker](https://img.shields.io/badge/Docker-28.4-2496ED?logo=docker&logoColor=white) ![Docker Hub](https://img.shields.io/badge/Docker%20Hub-2496ED?logo=docker&logoColor=white) |
+| Kubernetes      | ![Minikube](https://img.shields.io/badge/Minikube-1.37-326CE5?logo=kubernetes&logoColor=white) ![Kubernetes](https://img.shields.io/badge/Kubernetes-1.34-326CE5?logo=kubernetes&logoColor=white) ![kubectl](https://img.shields.io/badge/kubectl-326CE5?logo=linux&logoColor=white) |
+| Ingress         | ![NGINX](https://img.shields.io/badge/Ingress%20NGINX-1.13.2-009639?logo=nginx&logoColor=white) |
+| Infra / OS      | ![Ubuntu](https://img.shields.io/badge/Ubuntu-24.04%20LTS-E95420?logo=ubuntu&logoColor=white) |
 
 <br>
+
+---
 
 ## ⚙ 프로젝트 단계
 
@@ -84,7 +94,7 @@ public class Controller {
 
 ### 2️⃣ Docker Hub 업로드 및 컨테이너 실행
 
-- `Dockerfile`을을 이용해 Spring Boot 앱을 컨테이너화
+- `Dockerfile`을 이용해 Spring Boot 앱을 컨테이너화
 
 - 로컬에서 먼저 컨테이너 실행 및 curl 테스트 진행
 
@@ -157,17 +167,6 @@ kubectl get svc
 ```
 
 <br>
-
-###  주요 포트 개념
-
-| 용어          | 설명 |
-|---------------|------------------------------------------------|
-| containerPort | 컨테이너 내부에서 앱이 실제로 사용하는 포트 |
-| targetPort    | Service → Pod 간 트래픽 전달 포트 |
-| port          | Cluster 내부에서 Service가 노출하는 포트 |
-| nodePort      | 외부 접근 가능 포트 (30000~32767 범위) |
-
-<br>
 <br>
 
 ### 4️⃣ 포트 포워딩 & NodePort 테스트
@@ -188,7 +187,7 @@ curl http://<NodeIP>:30080/app2/get
 
 ### 5️⃣ Spring Boot 앱 Ingress 설정
 
-- `Ingress를` 사용하여 하나의 LoadBalancer/Ingress Controller로 도메인 기반 트래픽 분배
+- `Ingress`를 통해 하나의 LoadBalancer/Ingress Controller로 도메인 기반 트래픽 분배
 
 #### `spring-ingress.yaml`
 
@@ -265,4 +264,3 @@ curl http://spring.local/app2/get
 - Docker Hub에 Spring Boot 앱 업로드 완료  
 - Minikube에서 Pod 3개, Service, Ingress 설정 완료   
 - Ingress를 통한 외부 접속 및 curl 테스트 성공
-

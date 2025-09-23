@@ -51,6 +51,9 @@ hosts 파일 예시
 # .ssh 초기화 (선택)
 rm -rf /home/ubuntu/.ssh
 
+# SSH 키(공개키, 개인키)를 생성하는 명령어
+ssh-keygen -t rsa -b 4096
+
 # SSH 키 복사 (myserver01 기준, 다른 서버들도 똑같이 해줘야 함)
 ssh-copy-id ubuntu@myserver02
 ssh-copy-id ubuntu@myserver03

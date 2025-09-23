@@ -1,7 +1,24 @@
 # 📘 Kubernetes 멀티 노드 클러스터 환경 구축
  
-Ubuntu 24.04 환경에서 **멀티노드 Kubernetes 클러스터**를 구축  
-**Nginx Ingress Controller**를 통한 서비스 노출 설정
+## 📌 프로젝트 목표  
+
+> Ubuntu 24.04 환경에서 **멀티노드 Kubernetes 클러스터**를 구축
+>
+> **Nginx Ingress Controller**를 통한 서비스 노출 설정
+
+<br>
+
+---
+
+## 💻 개발 환경 (Environment / Stack)
+
+| Category        | Stack / Tools                                                                 |
+|-----------------|-------------------------------------------------------------------------------|
+| Runtime / Registry | ![containerd](https://img.shields.io/badge/containerd-1.7.27-575757?logo=containerd&logoColor=white) |
+| Kubernetes         | ![kubectl](https://img.shields.io/badge/kubectl-v1.30.14-326CE5?logo=kubernetes&logoColor=white) ![kubeadm](https://img.shields.io/badge/kubeadm-v1.30.14-326CE5?logo=kubernetes&logoColor=white) ![kubelet](https://img.shields.io/badge/kubelet-v1.30.14-326CE5?logo=kubernetes&logoColor=white) |
+| Ingress            | ![Ingress NGINX](https://img.shields.io/badge/Ingress--NGINX-v1.13.2-009639?logo=nginx&logoColor=white) |
+| CNI                | ![Calico](https://img.shields.io/badge/Calico-v3.25.0-FF6F00?logo=cisco&logoColor=white) |
+| Infra / OS         | ![Ubuntu](https://img.shields.io/badge/Ubuntu-24.04.2%20LTS-E95420?logo=ubuntu&logoColor=white) |
 
 ---
 
@@ -41,7 +58,7 @@ sudo reboot
 - `/etc/hosts` 파일에 각 서버 정보 등록  
 
 hosts 파일 예시  
-<img width="448" height="205" alt="Image" src="https://github.com/user-attachments/assets/e8a35273-2f92-443a-9793-026084992cfa" />
+<img width="634" height="107" alt="image" src="https://github.com/user-attachments/assets/128a9234-7106-451b-8c9a-179476a80de4" />
 
 ---
 
@@ -225,7 +242,8 @@ kubectl describe ingress
 - `/etc/hosts` 수정 후 접근 가능  
 
 hosts 파일 설정  
-<img width="478" height="215" alt="Image" src="https://github.com/user-attachments/assets/d08f2ea5-f758-4cef-abdf-1604e179d839" />
+<img width="478" height="215" alt="image" src="https://github.com/user-attachments/assets/e5d76322-7b56-4e6d-8665-b7442f65fffb" />
+
 
 ---
 

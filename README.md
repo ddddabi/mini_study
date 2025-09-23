@@ -41,4 +41,5 @@
 | 구분 | 설명 | 링크 | 노션 | 날짜 |
 |------|------|------|------|------|
 | ☁️ Spring Boot 앱 쿠버네티스 배포와 Ingress 연동 | Spring 앱을 Kubernetes 환경에 배포한 뒤 Ingress-NGINX를 통해 도메인 기반으로 외부 공개까지 하는 실습 |🔗 [LINK](https://github.com/ddddabi/mini_study/blob/main/spring-Ingress-Readme.md) | 📖 [LINK](https://www.notion.so/Kubernetes-Ingress-2736e7f13a77800d8460f1fc4f523494) | 2025.09.18 ~ 2025.09.19 |
+| ☁️Ubuntu 24.04 환경에서 멀티노드 Kubernetes 클러스터를 구축 | 마스터 노드 + 워커 노드 2대를 구성하여, 클러스터 네트워킹(CNI) 및 Ingress 기반 서비스 노출 과정을 학습 |🔗 [LINK](https://github.com/ddddabi/mini_study/blob/main/k8s-multi-layer-deployment.md) | 📖 [LINK]() | 2025.09.22 ~ 2025.09.23 |
 

@@ -41,7 +41,7 @@ sudo reboot
 - `/etc/hosts` 파일에 각 서버 정보 등록  
 
 hosts 파일 예시  
-<img width="431" height="141" alt="image" src="https://github.com/user-attachments/assets/ca50d112-1990-4c7a-830d-d4d5edf85632" />
+<img width="448" height="205" alt="Image" src="https://github.com/user-attachments/assets/e8a35273-2f92-443a-9793-026084992cfa" />
 
 ---
 

@@ -225,7 +225,7 @@ kubectl describe ingress
 - `/etc/hosts` 수정 후 접근 가능  
 
 hosts 파일 설정  
-<img width="335" height="142" alt="Image" src="https://github.com/user-attachments/assets/2a16f96d-3966-43f2-9efb-00631b63b414" />
+<img width="478" height="215" alt="Image" src="https://github.com/user-attachments/assets/d08f2ea5-f758-4cef-abdf-1604e179d839" />
 
 ---
 
